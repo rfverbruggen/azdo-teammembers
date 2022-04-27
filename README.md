@@ -1,5 +1,7 @@
 # Azure DevOps Team Members
 
+[![CI](https://github.com/rfverbruggen/azdo-teammembers/actions/workflows/test.yml/badge.svg)](https://github.com/rfverbruggen/azdo-teammembers/actions/workflows/test.yml)
+
 ## Features
 
 Add your team members to the VS Code settings.
