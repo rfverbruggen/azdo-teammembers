@@ -10,7 +10,7 @@ Add your team members to the VS Code settings.
 The names will be added as CodeLenses above the line where a guid reference is used.
 
 An autocomplete will trigger on the `@` sign with the team member names, the guid reference will be inserted.
-![CodeLenses and CompletionItems](https://github.com/rfverbruggen/azdo-teammembers/raw/main/images/images/codelenses_and_completionitems.png)
+![CodeLenses and CompletionItems](https://github.com/rfverbruggen/azdo-teammembers/raw/main/images/codelenses_and_completionitems.png)
 
 ## Extension Settings
 
