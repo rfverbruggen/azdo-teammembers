@@ -18,7 +18,7 @@ export async function openFile(content: string, language?: string): Promise<vsco
 	const document = await vscode.workspace.openTextDocument({
 		language,
 		content,
-	});;
+	});
 	vscode.window.showTextDocument(document);
 	return document;
 }

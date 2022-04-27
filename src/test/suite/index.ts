@@ -37,9 +37,9 @@ export function run(): Promise<void>
 						c();
 					}
 				});
-			} catch (err)
+			} catch (error)
 			{
-				e(err);
+				e(error);
 			}
 		});
 	});

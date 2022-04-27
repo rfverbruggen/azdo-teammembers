@@ -18,7 +18,7 @@ export class GuidCodeLensProvider implements vscode.CodeLensProvider
 		});
 	}
 
-	public provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.CodeLens[] | Thenable<vscode.CodeLens[]>
+	public provideCodeLenses(document: vscode.TextDocument, _token: vscode.CancellationToken): vscode.CodeLens[] | Thenable<vscode.CodeLens[]>
 	{
 		this.codeLenses = [];
 		const regex = new RegExp(this.regex);
@@ -47,7 +47,7 @@ export class GuidCodeLensProvider implements vscode.CodeLensProvider
 
 				this.codeLenses.push(new vscode.CodeLens(range, command));
 			}
-		};
+		}
 
 		return this.codeLenses;
 	}
