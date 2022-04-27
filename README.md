@@ -1,6 +1,6 @@
 # Azure DevOps Team Members
 
-[![CI](https://github.com/rfverbruggen/azdo-teammembers/actions/workflows/test.yml/badge.svg)](https://github.com/rfverbruggen/azdo-teammembers/actions/workflows/test.yml)
+[![CI](https://github.com/rfverbruggen/azdo-teammembers/actions/workflows/ci.yml/badge.svg)](https://github.com/rfverbruggen/azdo-teammembers/actions/workflows/ci.yml)
 
 ## Features
 
