@@ -29,7 +29,7 @@
 			}
 		}
 	},
-	"license": "SEE LICENSE",
+	"license": "MIT",
 	"homepage": "https://github.com/rfverbruggen/azdo-teammembers/blob/main/README.md",
 	"bugs": {
 		"url": "https://github.com/rfverbruggen/azdo-teammembers/issues"
