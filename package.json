@@ -29,6 +29,16 @@
 			}
 		}
 	},
+	"license": "SEE LICENSE",
+	"homepage": "https://github.com/rfverbruggen/azdo-teammembers/blob/main/README.md",
+	"bugs": {
+		"url": "https://github.com/rfverbruggen/azdo-teammembers/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/rfverbruggen/azdo-teammembers.git"
+	},
+	"icon": "images/azdo-teammembers_logo.png",
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
