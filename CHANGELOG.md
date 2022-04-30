@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-- None.
+- Compare guid in same casing for Code Lenses.
 
 ## 0.0.2
 
