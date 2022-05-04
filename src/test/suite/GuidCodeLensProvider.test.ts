@@ -120,4 +120,23 @@ suite('GuidCodeLensProvider Test Suite', () =>
 		assert.strictEqual(lens.length, 1);
 		assert.strictEqual(lens[0].command?.title, johnName);
 	});
+
+	test('GuidNotInConfig_ZeroCodeLenses_Success', async () =>
+	{
+		// Arrange.
+		const johnGuid = "f5b3c8dd-1c9d-4ddf-92f4-c52b195da01a";
+		const johnName = "John Doe";
+
+		const janeGuid = "8ebfe6b2-f151-4797-9956-0b5300db89f2";
+
+		await helper.changeConfig([{ "guid": johnGuid, "name": johnName }]);
+
+		const document = helper.openFile(`# Heading 1\n\n@<${janeGuid}>`, "markdown");
+
+		// Act.
+		const lens = await helper.getLens((await document).uri);
+
+		// Assert.
+		assert.strictEqual(lens.length, 0);
+	});
 });
