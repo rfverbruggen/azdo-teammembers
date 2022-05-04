@@ -37,15 +37,22 @@ export class GuidCodeLensProvider implements vscode.CodeLensProvider
 				let teamMembers: TeamMember[] = vscode.workspace.getConfiguration("azdo-teammembers").get("teammembers", []);
 
 				let guid = matches[1];
-				let name = teamMembers.find(member => member.guid === guid)?.name;
-				let command: vscode.Command = {
-					title: name ?? "",
-					tooltip: name,
-					command: "",
-					arguments: []
-				};
 
-				this.codeLenses.push(new vscode.CodeLens(range, command));
+				// Find the name based on the guid in the same casing.
+				let name = teamMembers.find(member => member.guid.toUpperCase() === guid.toUpperCase())?.name;
+
+				// Only insert a code lense if a name is found.
+				if (name !== undefined)
+				{
+					let command: vscode.Command = {
+						title: name,
+						tooltip: name,
+						command: "",
+						arguments: []
+					};
+
+					this.codeLenses.push(new vscode.CodeLens(range, command));
+				}
 			}
 		}
 

@@ -1,6 +1,6 @@
 # Azure DevOps Team Members
 
-[![CI](https://github.com/rfverbruggen/azdo-teammembers/actions/workflows/ci.yml/badge.svg)](https://github.com/rfverbruggen/azdo-teammembers/actions/workflows/ci.yml)
+[![CI/CD](https://github.com/rfverbruggen/azdo-teammembers/actions/workflows/ci.yml/badge.svg)](https://github.com/rfverbruggen/azdo-teammembers/actions/workflows/ci.yml)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=rfverbruggen_azdo-teammembers&metric=coverage)](https://sonarcloud.io/summary/new_code?id=rfverbruggen_azdo-teammembers)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=rfverbruggen_azdo-teammembers&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=rfverbruggen_azdo-teammembers)
 
