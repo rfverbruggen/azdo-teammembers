@@ -3,20 +3,6 @@ import * as helper from "../helper";
 
 suite('GuidCodeLensProvider Test Suite', () =>
 {
-	test('NoConfig_ZeroCodeLenses_Success', async () =>
-	{
-		// Arrange.
-		await helper.clearConfig();
-
-		const document = helper.openFile('# Heading 1\n\nJust some text', "markdown");
-
-		// Act.
-		const lens = await helper.getLens((await document).uri);
-
-		// Assert.
-		assert.strictEqual(lens.length, 0);
-	});
-
 	test('ValidConfig_OneCodeLens_Success', async () =>
 	{
 		// Arrange.

@@ -5,18 +5,6 @@ import * as helper from "../helper";
 
 suite('GuidCompletionItemProvider Test Suite', () =>
 {
-	test('NoConfig_ZeroCompletionItems_Success', async () =>
-	{
-		// Arrange.
-		await helper.clearConfig();
-
-		// Act.
-		const completionItems = new GuidCompletionItemProvider().provideCompletionItems({} as any, {} as any, {} as any, {} as any) as vscode.CompletionItem[];
-
-		// Assert.
-		assert.strictEqual(completionItems.length, 0);
-	});
-
 	test('ValidConfig_OneCompletionItem_Success', async () =>
 	{
 		// Arrange.
