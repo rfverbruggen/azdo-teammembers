@@ -15,6 +15,8 @@ The names will be added as CodeLenses above the line where a guid reference is u
 An autocomplete will trigger on the `@` sign with the team member names, the guid reference will be inserted.
 ![CodeLenses and CompletionItems](https://github.com/rfverbruggen/azdo-teammembers/raw/main/images/codelenses_and_completionitems.png)
 
+The name will be shown in a hover item when a guid is hovered.
+
 ## Extension Settings
 
 This extension contributes the following settings:
