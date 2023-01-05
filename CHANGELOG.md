@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+- None.
+
+## 0.1.0
+
 - Add hover provider to show the name if a guid is hovered.
 
 ## 0.0.3
