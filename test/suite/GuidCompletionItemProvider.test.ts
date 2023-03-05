@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
-import { GuidCompletionItemProvider } from "../../providers";
+import { GuidCompletionItemProvider } from "../../src/providers";
 import * as helper from "../helper";
 
 suite('GuidCompletionItemProvider Test Suite', () => {
