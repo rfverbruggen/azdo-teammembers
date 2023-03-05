@@ -1,12 +1,9 @@
 import * as vscode from 'vscode';
-import { GuidCodeLensProvider } from "./GuidCodeLensProvider";
-import { GuidCompletionItemProvider } from "./GuidCompletionItemProvider";
-import { GuidHoverProvider } from './GuidHoverProvider';
+import { GuidCompletionItemProvider, GuidCodeLensProvider, GuidHoverProvider } from './providers';
 
 let disposables: vscode.Disposable[] = [];
 
-export function activate(context: vscode.ExtensionContext)
-{
+export function activate(context: vscode.ExtensionContext) {
 	const registeredCompletionItemProvider = vscode.languages.registerCompletionItemProvider(
 		"markdown",
 		new GuidCompletionItemProvider(),
@@ -14,7 +11,7 @@ export function activate(context: vscode.ExtensionContext)
 	);
 
 	const registeredCodeLensProvider = vscode.languages.registerCodeLensProvider(
-		"markdown", 
+		"markdown",
 		new GuidCodeLensProvider()
 	);
 
@@ -28,10 +25,8 @@ export function activate(context: vscode.ExtensionContext)
 	context.subscriptions.push(registeredHoverProvider);
 }
 
-export function deactivate()
-{
-	if (disposables)
-	{
+export function deactivate() {
+	if (disposables) {
 		disposables.forEach(item => item.dispose());
 	}
 	disposables = [];
