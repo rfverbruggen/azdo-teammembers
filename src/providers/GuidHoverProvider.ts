@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { TeamMember } from "./models/TeamMember";
+import { TeamMember } from "../models/TeamMember";
 
 export class GuidHoverProvider implements vscode.HoverProvider {
     provideHover(document: vscode.TextDocument, position: vscode.Position, _token: vscode.CancellationToken): vscode.ProviderResult<vscode.Hover> {

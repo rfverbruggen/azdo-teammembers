@@ -1,12 +1,10 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
-import { GuidCompletionItemProvider } from "../../GuidCompletionItemProvider";
+import { GuidCompletionItemProvider } from "../../providers";
 import * as helper from "../helper";
 
-suite('GuidCompletionItemProvider Test Suite', () =>
-{
-	test('NoConfig_ZeroCompletionItems_Success', async () =>
-	{
+suite('GuidCompletionItemProvider Test Suite', () => {
+	test('NoConfig_ZeroCompletionItems_Success', async () => {
 		// Arrange.
 		await helper.clearConfig();
 
@@ -17,8 +15,7 @@ suite('GuidCompletionItemProvider Test Suite', () =>
 		assert.strictEqual(completionItems.length, 0);
 	});
 
-	test('ValidConfig_OneCompletionItem_Success', async () =>
-	{
+	test('ValidConfig_OneCompletionItem_Success', async () => {
 		// Arrange.
 		const johnGuid = "f5b3c8dd-1c9d-4ddf-92f4-c52b195da01a";
 		const johnName = "John Doe";
@@ -34,8 +31,7 @@ suite('GuidCompletionItemProvider Test Suite', () =>
 		assert.strictEqual(completionItems[0].label, johnName);
 	});
 
-	test('ValidConfig_TwoCompletionItems_Success', async () =>
-	{
+	test('ValidConfig_TwoCompletionItems_Success', async () => {
 		// Arrange.
 		const johnGuid = "f5b3c8dd-1c9d-4ddf-92f4-c52b195da01a";
 		const johnName = "John Doe";
