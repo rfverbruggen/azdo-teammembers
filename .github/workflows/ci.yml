@@ -3,7 +3,7 @@ name: CI
 on:
     push:
         branches:
-          - 'main'
+            - "main"
     pull_request:
         branches: [main]
     release:
@@ -23,7 +23,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
             - name: Install Node.js
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
             - run: npm install
             - run: xvfb-run -a npm test
               if: runner.os == 'Linux'
@@ -34,11 +34,11 @@ jobs:
         needs: ["test"]
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
               with:
                   fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
             - name: Install Node.js
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
             - run: npm install
             - run: xvfb-run -a npm test
             - uses: SonarSource/sonarcloud-github-action@master
@@ -52,9 +52,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
             - name: Install Node.js
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
             - run: npm install
             - run: npm run compile
             - run: npm run deploy
