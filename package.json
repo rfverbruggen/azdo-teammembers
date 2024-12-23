@@ -1,68 +1,75 @@
 {
-	"name": "azdo-teammembers",
-	"displayName": "Azure DevOps Team Members",
-	"description": "",
-	"version": "0.1.0",
-	"publisher": "rfverbruggen",
-	"engines": {
-		"vscode": "^1.95.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"keywords": [
-		"markdown",
-		"Azure",
-		"DevOps"
-	],
-	"activationEvents": [
-		"onLanguage:markdown"
-	],
-	"main": "./out/src/extension.js",
-	"contributes": {
-		"capabilities": {
-			"hoverProvider": "true"
-		},
-		"configuration": {
-			"properties": {
-				"azdo-teammembers.teammembers": {
-					"type": "array",
-					"default": []
-				}
-			}
-		}
-	},
-	"license": "MIT",
-	"homepage": "https://github.com/rfverbruggen/azdo-teammembers/blob/main/README.md",
-	"bugs": {
-		"url": "https://github.com/rfverbruggen/azdo-teammembers/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/rfverbruggen/azdo-teammembers.git"
-	},
-	"icon": "images/azdo-teammembers_logo.png",
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"lint": "eslint src",
-		"pretest": "npm run compile",
-		"test": "node ./out/test/runTest.js",
-		"deploy": "vsce publish"
-	},
-	"devDependencies": {
-		"@types/mocha": "^10.0.10",
-		"@types/node": "^22.10.2",
-		"@types/vscode": "^1.96.0",
-		"@typescript-eslint/eslint-plugin": "^8.18.1",
-		"@typescript-eslint/parser": "^8.18.1",
-		"@vscode/test-electron": "^2.4.1",
-		"@vscode/vsce": "^3.2.1",
-		"eslint": "^9.17.0",
-		"glob": "^11.0.0",
-		"mocha": "^11.0.1",
-		"nyc": "^17.1.0",
-		"typescript": "^5.7.2"
-	}
+  "name": "azdo-teammembers",
+  "displayName": "Azure DevOps Team Members",
+  "description": "",
+  "version": "0.1.0",
+  "publisher": "rfverbruggen",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "markdown",
+    "Azure",
+    "DevOps"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onLanguage:markdown"
+  ],
+  "main": "./out/src/extension.js",
+  "contributes": {
+    "capabilities": {
+      "hoverProvider": "true"
+    },
+    "configuration": {
+      "properties": {
+        "azdo-teammembers.teammembers": {
+          "type": "array",
+          "default": []
+        },
+        "azdo-teammembers.orgUrl": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/rfverbruggen/azdo-teammembers/blob/main/README.md",
+  "bugs": {
+    "url": "https://github.com/rfverbruggen/azdo-teammembers/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rfverbruggen/azdo-teammembers.git"
+  },
+  "icon": "images/azdo-teammembers_logo.png",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "deploy": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.10.2",
+    "@types/vscode": "^1.96.0",
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/parser": "^8.18.1",
+    "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.2.1",
+    "eslint": "^9.17.0",
+    "glob": "^11.0.0",
+    "mocha": "^11.0.1",
+    "nyc": "^17.1.0",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "azure-devops-node-api": "^14.1.0"
+  }
 }

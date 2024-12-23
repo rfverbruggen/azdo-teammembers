@@ -1,21 +1,28 @@
-import * as vscode from 'vscode';
-import { TeamMember } from "../models/TeamMember";
+import { TeamMember } from "azure-devops-node-api/interfaces/common/VSSInterfaces";
+import * as vscode from "vscode";
 
-export class GuidCompletionItemProvider implements vscode.CompletionItemProvider {
-	public provideCompletionItems(_document: vscode.TextDocument, _position: vscode.Position, _token: vscode.CancellationToken, _context: vscode.CompletionContext): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem>> {
-		let items: vscode.CompletionItem[] = [];
+export class GuidCompletionItemProvider
+  implements vscode.CompletionItemProvider
+{
+  constructor(private readonly _teamMembers: TeamMember[]) {}
 
-		let teamMembers: TeamMember[] = vscode.workspace.getConfiguration("azdo-teammembers").get("teammembers", []);
+  public provideCompletionItems(
+    _document: vscode.TextDocument,
+    _position: vscode.Position,
+    _token: vscode.CancellationToken,
+    _context: vscode.CompletionContext
+  ) {
+    let items: vscode.CompletionItem[] = [];
 
-		teamMembers.forEach(member => {
-			const item = new vscode.CompletionItem(
-				member.name,
-				vscode.CompletionItemKind.Text
-			);
-			item.insertText = `<${member.guid}>`;
-			items.push(item);
-		});
+    this._teamMembers.forEach((member) => {
+      const item = new vscode.CompletionItem(
+        member.identity?.displayName ?? "Unresolved",
+        vscode.CompletionItemKind.Text
+      );
+      item.insertText = `<${member.identity?.id}>`;
+      items.push(item);
+    });
 
-		return items;
-	}
+    return items;
+  }
 }
