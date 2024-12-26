@@ -1,34 +1,32 @@
 name: CI
 
 on:
-    push:
-        branches:
-            - "main"
-    pull_request:
-        branches: [main]
-    release:
-        types: [created]
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches: [main]
 
 permissions:
-    contents: write
-    pull-requests: write
+  contents: write
+  pull-requests: write
 
 jobs:
-    test:
-        strategy:
-            matrix:
-                os: [ubuntu-latest, windows-latest]
-        runs-on: ${{ matrix.os }}
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v3
-            - name: Install Node.js
-              uses: actions/setup-node@v4
-            - run: npm install
-            - run: xvfb-run -a npm test
-              if: runner.os == 'Linux'
-            - run: npm test
-              if: runner.os != 'Linux'
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+      - run: npm install
+      - run: xvfb-run -a npm test
+        if: runner.os == 'Linux'
+      - run: npm test
+        if: runner.os != 'Linux'
 
   sonarcloud:
     needs: ["test"]
@@ -65,23 +63,23 @@ jobs:
           # In case you want to publish to Visual Studio Marketplace
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
-    dependabot:
-        runs-on: ubuntu-latest
-        if: github.actor == 'dependabot[bot]'
-        needs: ["test", "sonarcloud"]
-        steps:
-            - name: Dependabot metadata
-              id: metadata
-              uses: dependabot/fetch-metadata@v1
-              with:
-                  github-token: "${{ secrets.GITHUB_TOKEN }}"
-            - name: Approve a PR
-              run: gh pr review --approve "$PR_URL"
-              env:
-                  PR_URL: ${{github.event.pull_request.html_url}}
-                  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-            - name: Enable auto-merge for Dependabot PRs
-              run: gh pr merge --auto --squash "$PR_URL"
-              env:
-                  PR_URL: ${{github.event.pull_request.html_url}}
-                  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  dependabot:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    needs: ["test", "sonarcloud"]
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v1
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Approve a PR
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Enable auto-merge for Dependabot PRs
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
