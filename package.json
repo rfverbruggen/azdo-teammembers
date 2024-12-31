@@ -2,10 +2,10 @@
   "name": "azdo-teammembers",
   "displayName": "Azure DevOps Team Members",
   "description": "",
-  "version": "0.1.0",
+  "version": "0.0.0-sematic-release",
   "publisher": "rfverbruggen",
   "engines": {
-    "vscode": "^1.95.0"
+    "vscode": "^1.96.0"
   },
   "categories": [
     "Other"
@@ -53,20 +53,23 @@
     "lint": "eslint src",
     "pretest": "npm run compile",
     "test": "node ./out/test/runTest.js",
-    "deploy": "vsce publish"
+    "release": "semantic-release"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.10.2",
     "@types/vscode": "^1.96.0",
-    "@typescript-eslint/eslint-plugin": "^8.18.1",
-    "@typescript-eslint/parser": "^8.18.1",
+    "@typescript-eslint/eslint-plugin": "^8.19.0",
+    "@typescript-eslint/parser": "^8.19.0",
     "@vscode/test-electron": "^2.4.1",
     "@vscode/vsce": "^3.2.1",
     "eslint": "^9.17.0",
     "glob": "^11.0.0",
     "mocha": "^11.0.1",
     "nyc": "^17.1.0",
+    "semantic-release": "^24.2.0",
+    "semantic-release-vsce": "^6.0.5",
     "typescript": "^5.7.2"
   },
   "dependencies": {

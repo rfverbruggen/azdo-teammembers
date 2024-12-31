@@ -1,16 +1,22 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
 import { GuidCompletionItemProvider } from "../../src/providers";
-import { TeamMember } from "azure-devops-node-api/interfaces/common/VSSInterfaces";
+import * as helper from "../helper";
+import TeamMemberFactory from "../../src/factories/TeamMemberFactory";
+import ConfigurationTeamMemberRepository from "../../src/repositories/ConfigurationTeamMemberRepository";
 
 suite("GuidCompletionItemProvider Test Suite", () => {
   test("NoConfig_ZeroCompletionItems_Success", async () => {
     // Arrange.
-    const teamMembers: TeamMember[] = [];
+    await helper.clearConfig();
+
+    const teamMemberRepository = new ConfigurationTeamMemberRepository();
+    const teamMemberFactory = new TeamMemberFactory();
+    teamMemberFactory.AddTeamMemberRepository(teamMemberRepository);
 
     // Act.
     const completionItems = new GuidCompletionItemProvider(
-      teamMembers
+      teamMemberFactory
     ).provideCompletionItems(
       {} as any,
       {} as any,
@@ -27,13 +33,15 @@ suite("GuidCompletionItemProvider Test Suite", () => {
     const johnGuid = "f5b3c8dd-1c9d-4ddf-92f4-c52b195da01a";
     const johnName = "John Doe";
 
-    const teamMembers: TeamMember[] = [
-      { identity: { id: johnGuid, displayName: johnName } },
-    ];
+    await helper.changeConfig([{ guid: johnGuid, name: johnName }]);
+
+    const teamMemberRepository = new ConfigurationTeamMemberRepository();
+    const teamMemberFactory = new TeamMemberFactory();
+    teamMemberFactory.AddTeamMemberRepository(teamMemberRepository);
 
     // Act.
     const completionItems = new GuidCompletionItemProvider(
-      teamMembers
+      teamMemberFactory
     ).provideCompletionItems(
       {} as any,
       {} as any,
@@ -55,14 +63,18 @@ suite("GuidCompletionItemProvider Test Suite", () => {
     const janeGuid = "8ebfe6b2-f151-4797-9956-0b5300db89f2";
     const janeName = "Jane Doe";
 
-    const teamMembers: TeamMember[] = [
-      { identity: { id: johnGuid, displayName: johnName } },
-      { identity: { id: janeGuid, displayName: janeName } },
-    ];
+    await helper.changeConfig([
+      { guid: johnGuid, name: johnName },
+      { guid: janeGuid, name: janeName },
+    ]);
+
+    const teamMemberRepository = new ConfigurationTeamMemberRepository();
+    const teamMemberFactory = new TeamMemberFactory();
+    teamMemberFactory.AddTeamMemberRepository(teamMemberRepository);
 
     // Act.
     const completionItems = new GuidCompletionItemProvider(
-      teamMembers
+      teamMemberFactory
     ).provideCompletionItems(
       {} as any,
       {} as any,

@@ -4,24 +4,23 @@ import {
   GuidCodeLensProvider,
   GuidHoverProvider,
 } from "./providers";
+import ConfigurationTeamMemberRepository from "./repositories/ConfigurationTeamMemberRepository";
+import TeamMemberFactory from "./factories/TeamMemberFactory";
 import { CredentialStore } from "./azdo/credentials";
 import { AzdoTeamMembers } from "./azdo/teamMembers";
-import { TeamMember } from "azure-devops-node-api/interfaces/common/VSSInterfaces";
-import { TeamMember as TeamMemberFromSettings } from "./models/TeamMember";
-import {
-  ORGURL_SETTINGS,
-  SETTINGS_NAMESPACE,
-  TEAMMEMBERS_SETTINGS,
-} from "./constants";
+import { SETTINGS_ORGURL, SETTINGS_SECTION } from "./constants";
 
 let disposables: vscode.Disposable[] = [];
 
 export async function activate(context: vscode.ExtensionContext) {
-  let teamMembers: TeamMember[] = [];
+  const teamMemberFactory = new TeamMemberFactory();
+  teamMemberFactory.AddTeamMemberRepository(
+    new ConfigurationTeamMemberRepository()
+  );
 
   const orgUrl = vscode.workspace
-    .getConfiguration(SETTINGS_NAMESPACE)
-    .get<string | undefined>(ORGURL_SETTINGS);
+    .getConfiguration(SETTINGS_SECTION)
+    .get<string | undefined>(SETTINGS_ORGURL);
 
   if (orgUrl) {
     const credentialStore = new CredentialStore();
@@ -31,37 +30,24 @@ export async function activate(context: vscode.ExtensionContext) {
     const azdoTeamMembers = new AzdoTeamMembers(credentialStore);
     await azdoTeamMembers.ensure();
 
-    teamMembers.push(...(await azdoTeamMembers.getTeamMembers()));
+    // teamMemberFactory.AddTeamMemberRepository(azdoTeamMembers);
   }
-
-  const teamMembersFromSettings: TeamMemberFromSettings[] = vscode.workspace
-    .getConfiguration(SETTINGS_NAMESPACE)
-    .get(TEAMMEMBERS_SETTINGS, []);
-
-  teamMembersFromSettings.forEach((member) => {
-    teamMembers.push({
-      identity: {
-        id: member.guid,
-        displayName: member.name,
-      },
-    });
-  });
 
   const registeredCompletionItemProvider =
     vscode.languages.registerCompletionItemProvider(
       "markdown",
-      new GuidCompletionItemProvider(teamMembers),
-      ...["@"]
+      new GuidCompletionItemProvider(teamMemberFactory),
+      "@"
     );
 
   const registeredCodeLensProvider = vscode.languages.registerCodeLensProvider(
     "markdown",
-    new GuidCodeLensProvider(teamMembers)
+    new GuidCodeLensProvider(teamMemberFactory)
   );
 
   const registeredHoverProvider = vscode.languages.registerHoverProvider(
     "markdown",
-    new GuidHoverProvider(teamMembers)
+    new GuidHoverProvider(teamMemberFactory)
   );
 
   context.subscriptions.push(registeredCompletionItemProvider);

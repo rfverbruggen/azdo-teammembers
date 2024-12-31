@@ -1,4 +1,3 @@
-export const EXTENSIONID = "rfverbruggen.azdo-teammembers";
-export const SETTINGS_NAMESPACE = "azdo-teammembers";
-export const ORGURL_SETTINGS = "orgUrl";
-export const TEAMMEMBERS_SETTINGS = "teammembers";
+export const SETTINGS_SECTION = "azdo-teammembers";
+export const SETTINGS_TEAMMEMBERS = "teammembers";
+export const SETTINGS_ORGURL = "orgUrl";
