@@ -3,14 +3,14 @@ import { ITeamMemberFactory } from "../interfaces/ITeamMemberFactory";
 
 export class GuidCodeLensProvider implements vscode.CodeLensProvider {
   private codeLenses: vscode.CodeLens[] = [];
-  private regex: RegExp;
-  private _onDidChangeCodeLenses: vscode.EventEmitter<void> =
+  private readonly regex: RegExp;
+  private readonly _onDidChangeCodeLenses: vscode.EventEmitter<void> =
     new vscode.EventEmitter<void>();
   public readonly onDidChangeCodeLenses: vscode.Event<void> =
     this._onDidChangeCodeLenses.event;
 
-  constructor(private _teamMemberFactory: ITeamMemberFactory) {
-    this.regex = /@<([a-zA-Z0-9\-]+)>/g;
+  constructor(private readonly _teamMemberFactory: ITeamMemberFactory) {
+    this.regex = /@<([a-zA-Z0-9-]+)>/g;
 
     vscode.workspace.onDidChangeConfiguration((_) => {
       this._onDidChangeCodeLenses.fire();

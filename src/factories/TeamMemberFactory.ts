@@ -3,7 +3,7 @@ import { ITeamMemberRepository } from "../interfaces/ITeamMemberRepository";
 import { TeamMember } from "../models/TeamMember";
 
 export default class TeamMemberFactory implements ITeamMemberFactory {
-  private _teamMemberRepositories: ITeamMemberRepository[] = [];
+  private readonly _teamMemberRepositories: ITeamMemberRepository[] = [];
 
   AddTeamMemberRepository(teamMemberRepository: ITeamMemberRepository): void {
     this._teamMemberRepositories.push(teamMemberRepository);

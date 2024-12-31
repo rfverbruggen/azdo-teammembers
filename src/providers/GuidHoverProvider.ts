@@ -2,14 +2,14 @@ import * as vscode from "vscode";
 import { ITeamMemberFactory } from "../interfaces/ITeamMemberFactory";
 
 export class GuidHoverProvider implements vscode.HoverProvider {
-  constructor(private _teamMemberFactory: ITeamMemberFactory) {}
+  constructor(private readonly _teamMemberFactory: ITeamMemberFactory) {}
 
   provideHover(
     document: vscode.TextDocument,
     position: vscode.Position,
     _token: vscode.CancellationToken
   ): vscode.ProviderResult<vscode.Hover> {
-    const regex = new RegExp(/@<(?<guid>[a-zA-Z0-9\-]+)>/g);
+    const regex = new RegExp(/@<(?<guid>[a-zA-Z0-9-]+)>/g);
 
     const range = document.getWordRangeAtPosition(position, regex);
     const mention = document.getText(range);
@@ -23,7 +23,7 @@ export class GuidHoverProvider implements vscode.HoverProvider {
       let name = this._teamMemberFactory
         .GetTeamMembers()
         .find(
-          (member) => member.guid.toUpperCase() === guid!.toUpperCase()
+          (member) => member.guid.toUpperCase() === guid.toUpperCase()
         )?.name;
 
       if (name) {

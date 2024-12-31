@@ -4,7 +4,7 @@ import { ITeamMemberFactory } from "../interfaces/ITeamMemberFactory";
 export class GuidCompletionItemProvider
   implements vscode.CompletionItemProvider
 {
-  constructor(private _teamMemberFactory: ITeamMemberFactory) {}
+  constructor(private readonly _teamMemberFactory: ITeamMemberFactory) {}
 
   public provideCompletionItems(
     _document: vscode.TextDocument,
