@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
-import { TeamMember } from "../models/TeamMember";
+import { ITeamMemberFactory } from "../interfaces/ITeamMemberFactory";
 
 export class GuidHoverProvider implements vscode.HoverProvider {
-  constructor(private _teamMembers: TeamMember[]) {}
+  constructor(private _teamMemberFactory: ITeamMemberFactory) {}
 
   provideHover(
     document: vscode.TextDocument,
@@ -20,9 +20,11 @@ export class GuidHoverProvider implements vscode.HoverProvider {
 
     if (guid) {
       // Find the name based on the guid
-      let name = this._teamMembers.find(
-        (member) => member.guid.toUpperCase() === guid!.toUpperCase()
-      )?.name;
+      let name = this._teamMemberFactory
+        .GetTeamMembers()
+        .find(
+          (member) => member.guid.toUpperCase() === guid!.toUpperCase()
+        )?.name;
 
       if (name) {
         return new vscode.Hover({ language: "azdo-teammember", value: name });

@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { TeamMember } from "../models/TeamMember";
+import { ITeamMemberFactory } from "../interfaces/ITeamMemberFactory";
 
 export class GuidCodeLensProvider implements vscode.CodeLensProvider {
   private codeLenses: vscode.CodeLens[] = [];
@@ -9,7 +9,7 @@ export class GuidCodeLensProvider implements vscode.CodeLensProvider {
   public readonly onDidChangeCodeLenses: vscode.Event<void> =
     this._onDidChangeCodeLenses.event;
 
-  constructor(private _teamMembers: TeamMember[]) {
+  constructor(private _teamMemberFactory: ITeamMemberFactory) {
     this.regex = /@<([a-zA-Z0-9\-]+)>/g;
 
     vscode.workspace.onDidChangeConfiguration((_) => {
@@ -39,9 +39,11 @@ export class GuidCodeLensProvider implements vscode.CodeLensProvider {
         let guid = matches[1];
 
         // Find the name based on the guid in the same casing.
-        let name = this._teamMembers.find(
-          (member) => member.guid.toUpperCase() === guid.toUpperCase()
-        )?.name;
+        let name = this._teamMemberFactory
+          .GetTeamMembers()
+          .find(
+            (member) => member.guid.toUpperCase() === guid.toUpperCase()
+          )?.name;
 
         // Only insert a code lense if a name is found.
         if (name !== undefined) {

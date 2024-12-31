@@ -1,10 +1,10 @@
 import * as vscode from "vscode";
-import { TeamMember } from "../models/TeamMember";
+import { ITeamMemberFactory } from "../interfaces/ITeamMemberFactory";
 
 export class GuidCompletionItemProvider
   implements vscode.CompletionItemProvider
 {
-  constructor(private _teamMembers: TeamMember[]) {}
+  constructor(private _teamMemberFactory: ITeamMemberFactory) {}
 
   public provideCompletionItems(
     _document: vscode.TextDocument,
@@ -16,7 +16,7 @@ export class GuidCompletionItemProvider
   > {
     let items: vscode.CompletionItem[] = [];
 
-    this._teamMembers.forEach((member) => {
+    this._teamMemberFactory.GetTeamMembers().forEach((member) => {
       const item = new vscode.CompletionItem(
         member.name,
         vscode.CompletionItemKind.Text

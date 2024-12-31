@@ -2,17 +2,21 @@ import * as assert from "assert";
 import * as vscode from "vscode";
 import { GuidCompletionItemProvider } from "../../src/providers";
 import * as helper from "../helper";
-import { TeamMember } from "../../src/models/TeamMember";
+import TeamMemberFactory from "../../src/factories/TeamMemberFactory";
+import ConfigurationTeamMemberRepository from "../../src/repositories/ConfigurationTeamMemberRepository";
 
 suite("GuidCompletionItemProvider Test Suite", () => {
   test("NoConfig_ZeroCompletionItems_Success", async () => {
     // Arrange.
     await helper.clearConfig();
-    const teammembers: TeamMember[] = [];
+
+    const teamMemberRepository = new ConfigurationTeamMemberRepository();
+    const teamMemberFactory = new TeamMemberFactory();
+    teamMemberFactory.AddTeamMemberRepository(teamMemberRepository);
 
     // Act.
     const completionItems = new GuidCompletionItemProvider(
-      teammembers
+      teamMemberFactory
     ).provideCompletionItems(
       {} as any,
       {} as any,
@@ -29,12 +33,15 @@ suite("GuidCompletionItemProvider Test Suite", () => {
     const johnGuid = "f5b3c8dd-1c9d-4ddf-92f4-c52b195da01a";
     const johnName = "John Doe";
 
-    await helper.changeConfig([]);
-    const teammembers: TeamMember[] = [{ guid: johnGuid, name: johnName }];
+    await helper.changeConfig([{ guid: johnGuid, name: johnName }]);
+
+    const teamMemberRepository = new ConfigurationTeamMemberRepository();
+    const teamMemberFactory = new TeamMemberFactory();
+    teamMemberFactory.AddTeamMemberRepository(teamMemberRepository);
 
     // Act.
     const completionItems = new GuidCompletionItemProvider(
-      teammembers
+      teamMemberFactory
     ).provideCompletionItems(
       {} as any,
       {} as any,
@@ -61,14 +68,13 @@ suite("GuidCompletionItemProvider Test Suite", () => {
       { guid: janeGuid, name: janeName },
     ]);
 
-    const teammembers: TeamMember[] = [
-      { guid: johnGuid, name: johnName },
-      { guid: janeGuid, name: janeName },
-    ];
+    const teamMemberRepository = new ConfigurationTeamMemberRepository();
+    const teamMemberFactory = new TeamMemberFactory();
+    teamMemberFactory.AddTeamMemberRepository(teamMemberRepository);
 
     // Act.
     const completionItems = new GuidCompletionItemProvider(
-      teammembers
+      teamMemberFactory
     ).provideCompletionItems(
       {} as any,
       {} as any,
