@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Azdo } from "./azdo";
-import { ORGURL_SETTINGS, SETTINGS_NAMESPACE } from "../constants";
+import { SETTINGS_ORGURL, SETTINGS_SECTION } from "../constants";
 
 export class CredentialStore implements vscode.Disposable {
   private _disposables: vscode.Disposable[];
@@ -35,8 +35,8 @@ export class CredentialStore implements vscode.Disposable {
 
   public async login(): Promise<Azdo | undefined> {
     this._orgUrl = vscode.workspace
-      .getConfiguration(SETTINGS_NAMESPACE)
-      .get<string | undefined>(ORGURL_SETTINGS);
+      .getConfiguration(SETTINGS_SECTION)
+      .get<string | undefined>(SETTINGS_ORGURL);
 
     if (!this._orgUrl) {
       return undefined;

@@ -9,11 +9,13 @@ export default class TeamMemberFactory implements ITeamMemberFactory {
     this._teamMemberRepositories.push(teamMemberRepository);
   }
 
-  GetTeamMembers(): TeamMember[] {
+  async GetTeamMembers(): Promise<TeamMember[]> {
     let teamMembers: TeamMember[] = [];
 
-    this._teamMemberRepositories.forEach((teamMemberRepository) => {
-      teamMembers = teamMembers.concat(teamMemberRepository.GetTeamMembers());
+    this._teamMemberRepositories.forEach(async (teamMemberRepository) => {
+      teamMembers = teamMembers.concat(
+        await teamMemberRepository.GetTeamMembers()
+      );
     });
 
     return teamMembers;

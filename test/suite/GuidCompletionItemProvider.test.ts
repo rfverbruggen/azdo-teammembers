@@ -14,15 +14,18 @@ suite("GuidCompletionItemProvider Test Suite", () => {
     const teamMemberFactory = new TeamMemberFactory();
     teamMemberFactory.AddTeamMemberRepository(teamMemberRepository);
 
-    // Act.
-    const completionItems = new GuidCompletionItemProvider(
+    const guidCompletionItemProvider = new GuidCompletionItemProvider(
       teamMemberFactory
-    ).provideCompletionItems(
-      {} as any,
-      {} as any,
-      {} as any,
-      {} as any
-    ) as vscode.CompletionItem[];
+    );
+
+    // Act.
+    const completionItems =
+      (await guidCompletionItemProvider.provideCompletionItems(
+        {} as any,
+        {} as any,
+        {} as any,
+        {} as any
+      )) as vscode.CompletionItem[];
 
     // Assert.
     assert.strictEqual(completionItems.length, 0);
@@ -39,15 +42,18 @@ suite("GuidCompletionItemProvider Test Suite", () => {
     const teamMemberFactory = new TeamMemberFactory();
     teamMemberFactory.AddTeamMemberRepository(teamMemberRepository);
 
-    // Act.
-    const completionItems = new GuidCompletionItemProvider(
+    const guidCompletionItemProvider = new GuidCompletionItemProvider(
       teamMemberFactory
-    ).provideCompletionItems(
-      {} as any,
-      {} as any,
-      {} as any,
-      {} as any
-    ) as vscode.CompletionItem[];
+    );
+
+    // Act.
+    const completionItems =
+      (await guidCompletionItemProvider.provideCompletionItems(
+        {} as any,
+        {} as any,
+        {} as any,
+        {} as any
+      )) as vscode.CompletionItem[];
 
     // Assert.
     assert.strictEqual(completionItems.length, 1);
@@ -72,15 +78,18 @@ suite("GuidCompletionItemProvider Test Suite", () => {
     const teamMemberFactory = new TeamMemberFactory();
     teamMemberFactory.AddTeamMemberRepository(teamMemberRepository);
 
-    // Act.
-    const completionItems = new GuidCompletionItemProvider(
+    const guidCompletionItemProvider = new GuidCompletionItemProvider(
       teamMemberFactory
-    ).provideCompletionItems(
-      {} as any,
-      {} as any,
-      {} as any,
-      {} as any
-    ) as vscode.CompletionItem[];
+    );
+
+    // Act.
+    const completionItems =
+      (await guidCompletionItemProvider.provideCompletionItems(
+        {} as any,
+        {} as any,
+        {} as any,
+        {} as any
+      )) as vscode.CompletionItem[];
 
     // Assert.
     assert.strictEqual(completionItems.length, 2);

@@ -7,8 +7,8 @@ import {
 import ConfigurationTeamMemberRepository from "./repositories/ConfigurationTeamMemberRepository";
 import TeamMemberFactory from "./factories/TeamMemberFactory";
 import { CredentialStore } from "./azdo/credentials";
-import { AzdoTeamMembers } from "./azdo/teamMembers";
-import { SETTINGS_ORGURL, SETTINGS_SECTION } from "./constants";
+import { SETTINGS_SECTION, SETTINGS_ORGURL } from "./constants";
+import AzDOTeamMemberRepository from "./repositories/AzDOTeamMemberRepository";
 
 let disposables: vscode.Disposable[] = [];
 
@@ -27,10 +27,13 @@ export async function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(credentialStore);
     await credentialStore.initialize();
 
-    const azdoTeamMembers = new AzdoTeamMembers(credentialStore);
-    await azdoTeamMembers.ensure();
+    const azdoTeamMemberRepository = new AzDOTeamMemberRepository(
+      credentialStore
+    );
 
-    // teamMemberFactory.AddTeamMemberRepository(azdoTeamMembers);
+    teamMemberFactory.AddTeamMemberRepository(
+      await azdoTeamMemberRepository.Ensure()
+    );
   }
 
   const registeredCompletionItemProvider =

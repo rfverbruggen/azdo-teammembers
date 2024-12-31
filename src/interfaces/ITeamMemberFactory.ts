@@ -4,5 +4,5 @@ import { ITeamMemberRepository } from "./ITeamMemberRepository";
 export interface ITeamMemberFactory {
   AddTeamMemberRepository(teamMemberRepository: ITeamMemberRepository): void;
 
-  GetTeamMembers(): TeamMember[];
+  GetTeamMembers(): Promise<TeamMember[]>;
 }

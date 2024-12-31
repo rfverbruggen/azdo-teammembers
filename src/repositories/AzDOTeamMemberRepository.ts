@@ -1,19 +1,17 @@
-import * as vscode from "vscode";
-import { Azdo } from "./azdo";
+import { Azdo } from "../azdo/azdo";
+import { CredentialStore } from "../azdo/credentials";
+import TeamMemberConverter from "../converters/TeamMemberConverter";
+import { ITeamMemberRepository } from "../interfaces/ITeamMemberRepository";
+import { TeamMember } from "../models/TeamMember";
 import { ICoreApi } from "azure-devops-node-api/CoreApi";
-import { TeamMember } from "azure-devops-node-api/interfaces/common/VSSInterfaces";
-import { CredentialStore } from "./credentials";
 
-export class AzdoTeamMembers implements vscode.Disposable {
-  private _disposables: vscode.Disposable[] = [];
+export default class AzDOTeamMemberRepository implements ITeamMemberRepository {
   private _hub: Azdo | undefined;
   private _coreApi?: ICoreApi;
 
-  constructor(private readonly _credentialStore: CredentialStore) {
-    this._disposables = [];
-  }
+  constructor(private readonly _credentialStore: CredentialStore) {}
 
-  async ensure(): Promise<AzdoTeamMembers> {
+  async Ensure(): Promise<AzDOTeamMemberRepository> {
     if (!this._credentialStore.isAuthenticated()) {
       await this._credentialStore.initialize();
     }
@@ -24,7 +22,7 @@ export class AzdoTeamMembers implements vscode.Disposable {
     return this;
   }
 
-  async getTeamMembers(): Promise<TeamMember[]> {
+  async GetTeamMembers(): Promise<TeamMember[]> {
     let teamMembers: TeamMember[] = [];
 
     await this._coreApi?.getProjects().then(async (projects) => {
@@ -36,7 +34,11 @@ export class AzdoTeamMembers implements vscode.Disposable {
                 await this._coreApi
                   ?.getTeamMembersWithExtendedProperties(project.id!, team.id!)
                   .then(async (teamTeamMembers) => {
-                    teamMembers.push(...teamTeamMembers);
+                    teamMembers.push(
+                      ...teamTeamMembers.map((member) =>
+                        TeamMemberConverter.ConvertToTeamMember(member)
+                      )
+                    );
                   });
               })
             );
@@ -47,15 +49,9 @@ export class AzdoTeamMembers implements vscode.Disposable {
 
     const uniqueTeamMembers = teamMembers.filter(
       (teamMember, i) =>
-        teamMembers.findIndex(
-          (s) => teamMember.identity?.id === s.identity?.id
-        ) === i
+        teamMembers.findIndex((s) => teamMember.guid === s.guid) === i
     );
 
     return uniqueTeamMembers;
-  }
-
-  dispose() {
-    this._disposables.forEach((disposable) => disposable.dispose());
   }
 }
