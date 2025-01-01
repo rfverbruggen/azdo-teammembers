@@ -47,8 +47,10 @@ suite("AzDOTeamMemberRepository", () => {
     test("should set hub and coreApi after ensuring", async () => {
       // Arrange.
       credentialStoreStub.IsAuthenticated.returns(true);
+      const webApiStub = sinon.createStubInstance(CoreApi);
       credentialStoreStub.GetHub.returns({
-        connection: { getCoreApi: async () => coreApiStub },
+        // @ts-ignore:next-line
+        connection: webApiStub,
       });
 
       // Act.
