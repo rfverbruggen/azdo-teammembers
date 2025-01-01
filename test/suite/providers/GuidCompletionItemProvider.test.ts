@@ -1,9 +1,9 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
-import { GuidCompletionItemProvider } from "../../src/providers";
-import * as helper from "../helper";
-import TeamMemberFactory from "../../src/factories/TeamMemberFactory";
-import ConfigurationTeamMemberRepository from "../../src/repositories/ConfigurationTeamMemberRepository";
+import { GuidCompletionItemProvider } from "../../../src/providers";
+import * as helper from "../../helper";
+import TeamMemberFactory from "../../../src/factories/TeamMemberFactory";
+import ConfigurationTeamMemberRepository from "../../../src/repositories/ConfigurationTeamMemberRepository";
 
 suite("GuidCompletionItemProvider Test Suite", () => {
   test("NoConfig_ZeroCompletionItems_Success", async () => {
