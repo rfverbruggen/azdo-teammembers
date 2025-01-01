@@ -22,30 +22,39 @@ suite("AzDOTeamMemberRepository", () => {
 
   suite("Ensure", () => {
     test("should initialize credential store if not authenticated", async () => {
+      // Arrange.
       credentialStoreStub.IsAuthenticated.returns(false);
       credentialStoreStub.Initialize.resolves();
 
+      // Act.
       await repository.Ensure();
 
+      // Assert.
       assert.strictEqual(credentialStoreStub.Initialize.calledOnce, true);
     });
 
     test("should not initialize credential store if already authenticated", async () => {
+      // Arrange.
       credentialStoreStub.IsAuthenticated.returns(true);
 
+      // Act.
       await repository.Ensure();
 
+      // Assert.
       assert.strictEqual(credentialStoreStub.Initialize.notCalled, true);
     });
 
     test("should set hub and coreApi after ensuring", async () => {
+      // Arrange.
       credentialStoreStub.IsAuthenticated.returns(true);
       credentialStoreStub.GetHub.returns({
         connection: { getCoreApi: async () => coreApiStub },
       });
 
+      // Act.
       await repository.Ensure();
 
+      // Assert.
       assert.notStrictEqual(repository["_hub"], undefined);
       assert.notStrictEqual(repository["_coreApi"], undefined);
     });
@@ -53,6 +62,7 @@ suite("AzDOTeamMemberRepository", () => {
 
   suite("GetTeamMembers", () => {
     test("should return unique team members", async () => {
+      // Arrange.
       const projectIds = ["project1", "project2"];
       const teamIds = ["team1", "team2"];
       const teamMembers = [
@@ -67,8 +77,10 @@ suite("AzDOTeamMemberRepository", () => {
         .stub(repository as any, "GetTeamMembersPerProjectIdAndTeamId")
         .resolves(teamMembers);
 
+      // Act.
       const result = await repository.GetTeamMembers();
 
+      // Assert.
       assert.strictEqual(result.length, 2);
       assert.strictEqual(result[0].guid, "1");
       assert.strictEqual(result[1].guid, "2");
@@ -78,39 +90,48 @@ suite("AzDOTeamMemberRepository", () => {
   suite("Private methods", () => {
     suite("GetProjectIds", () => {
       test("should return project ids", async () => {
+        // Arrange.
         const projects = [{ id: "project1" }, { id: "project2" }];
         coreApiStub.getProjects.resolves(projects);
 
+        // Act.
         const result = await (repository as any).GetProjectIds();
 
+        // Assert.
         assert.deepStrictEqual(result, ["project1", "project2"]);
       });
     });
 
     suite("GetTeamIdsPerProjectId", () => {
       test("should return team ids for a project", async () => {
+        // Arrange.
         const teams = [{ id: "team1" }, { id: "team2" }];
         coreApiStub.getTeams.resolves(teams);
 
+        // Act.
         const result = await (repository as any).GetTeamIdsPerProjectId(
           "project1"
         );
 
+        // Assert.
         assert.deepStrictEqual(result, ["team1", "team2"]);
       });
     });
 
     suite("GetTeamMembersPerProjectIdAndTeamId", () => {
       test("should return team members for a project and team", async () => {
+        // Arrange.
         const teamMembers: AzdoTeamMember[] = [
           { identity: { id: "1", displayName: "Member 1" } },
         ];
         coreApiStub.getTeamMembersWithExtendedProperties.resolves(teamMembers);
 
+        // Act.
         const result = await (
           repository as any
         ).GetTeamMembersPerProjectIdAndTeamId("project1", "team1");
 
+        // Assert.
         assert.strictEqual(result.length, 1);
         assert.strictEqual(result[0].guid, "1");
       });
