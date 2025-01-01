@@ -25,7 +25,7 @@ export async function activate(context: vscode.ExtensionContext) {
   if (orgUrl) {
     const credentialStore = new CredentialStore();
     context.subscriptions.push(credentialStore);
-    await credentialStore.initialize();
+    await credentialStore.Initialize();
 
     const azdoTeamMemberRepository = new AzDOTeamMemberRepository(
       credentialStore

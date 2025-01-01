@@ -1,5 +1,5 @@
 import { Azdo } from "../azdo/azdo";
-import { CredentialStore } from "../azdo/credentials";
+import { ICredentialStore } from "../interfaces/ICredentialStore";
 import TeamMemberConverter from "../converters/TeamMemberConverter";
 import { ITeamMemberRepository } from "../interfaces/ITeamMemberRepository";
 import { TeamMember } from "../models/TeamMember";
@@ -9,14 +9,14 @@ export default class AzDOTeamMemberRepository implements ITeamMemberRepository {
   private _hub: Azdo | undefined;
   private _coreApi?: ICoreApi;
 
-  constructor(private readonly _credentialStore: CredentialStore) {}
+  constructor(private readonly _credentialStore: ICredentialStore) {}
 
   async Ensure(): Promise<AzDOTeamMemberRepository> {
-    if (!this._credentialStore.isAuthenticated()) {
-      await this._credentialStore.initialize();
+    if (!this._credentialStore.IsAuthenticated()) {
+      await this._credentialStore.Initialize();
     }
 
-    this._hub = this._credentialStore.getHub();
+    this._hub = this._credentialStore.GetHub();
     this._coreApi = await this._hub?.connection.getCoreApi();
 
     return this;

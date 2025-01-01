@@ -1,8 +1,9 @@
 import * as vscode from "vscode";
 import { Azdo } from "./azdo";
 import { SETTINGS_ORGURL, SETTINGS_SECTION } from "../constants";
+import { ICredentialStore } from "../interfaces/ICredentialStore";
 
-export class CredentialStore implements vscode.Disposable {
+export class CredentialStore implements ICredentialStore, vscode.Disposable {
   private readonly _disposables: vscode.Disposable[];
   private _azdoAPI: Azdo | undefined;
   private _orgUrl: string | undefined;
@@ -14,26 +15,26 @@ export class CredentialStore implements vscode.Disposable {
     this._disposables = [];
     this._disposables.push(
       vscode.authentication.onDidChangeSessions(async () => {
-        if (!this.isAuthenticated()) {
-          return await this.initialize();
+        if (!this.IsAuthenticated()) {
+          return await this.Initialize();
         }
       })
     );
   }
 
-  public async initialize(): Promise<void> {
-    this._azdoAPI = await this.login();
+  public async Initialize(): Promise<void> {
+    this._azdoAPI = await this.Login();
   }
 
-  public isAuthenticated(): boolean {
+  public IsAuthenticated(): boolean {
     return !!this._azdoAPI;
   }
 
-  public getHub(): Azdo | undefined {
+  public GetHub(): Azdo | undefined {
     return this._azdoAPI;
   }
 
-  public async login(): Promise<Azdo | undefined> {
+  public async Login(): Promise<Azdo | undefined> {
     this._orgUrl = vscode.workspace
       .getConfiguration(SETTINGS_SECTION)
       .get<string | undefined>(SETTINGS_ORGURL);
