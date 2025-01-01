@@ -27,10 +27,10 @@ export default class AzDOTeamMemberRepository implements ITeamMemberRepository {
 
     const projectIds = await this.GetProjectIds();
 
-    projectIds.map(async (projectId) => {
+    projectIds.forEach(async (projectId) => {
       const teamIds = await this.GetTeamIdsPerProjectId(projectId);
 
-      teamIds.map(async (teamId) => {
+      teamIds.forEach(async (teamId) => {
         const teamMembersPerTeam =
           await this.GetTeamMembersPerProjectIdAndTeamId(projectId, teamId);
 
