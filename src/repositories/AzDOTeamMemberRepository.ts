@@ -25,26 +25,17 @@ export default class AzDOTeamMemberRepository implements ITeamMemberRepository {
   async GetTeamMembers(): Promise<TeamMember[]> {
     let teamMembers: TeamMember[] = [];
 
-    await this._coreApi?.getProjects().then(async (projects) => {
-      await Promise.all(
-        projects.map(async (project) => {
-          await this._coreApi?.getTeams(project.id!).then(async (teams) => {
-            await Promise.all(
-              teams.map(async (team) => {
-                await this._coreApi
-                  ?.getTeamMembersWithExtendedProperties(project.id!, team.id!)
-                  .then(async (teamTeamMembers) => {
-                    teamMembers.push(
-                      ...teamTeamMembers.map((member) =>
-                        TeamMemberConverter.ConvertToTeamMember(member)
-                      )
-                    );
-                  });
-              })
-            );
-          });
-        })
-      );
+    const projectIds = await this.GetProjectIds();
+
+    projectIds.map(async (projectId) => {
+      const teamIds = await this.GetTeamIdsPerProjectId(projectId);
+
+      teamIds.map(async (teamId) => {
+        const teamMembersPerTeam =
+          await this.GetTeamMembersPerProjectIdAndTeamId(projectId, teamId);
+
+        teamMembers.push(...teamMembersPerTeam);
+      });
     });
 
     const uniqueTeamMembers = teamMembers.filter(
@@ -53,5 +44,44 @@ export default class AzDOTeamMemberRepository implements ITeamMemberRepository {
     );
 
     return uniqueTeamMembers;
+  }
+
+  private async GetProjectIds(): Promise<string[]> {
+    let projectIds: string[] = [];
+
+    await this._coreApi?.getProjects().then((projects) => {
+      projectIds = projects.map((project) => project.id!);
+    });
+
+    return projectIds;
+  }
+
+  private async GetTeamIdsPerProjectId(projectId: string): Promise<string[]> {
+    let teamIds: string[] = [];
+
+    await this._coreApi?.getTeams(projectId).then((teams) => {
+      teamIds = teams.map((team) => team.id!);
+    });
+
+    return teamIds;
+  }
+
+  private async GetTeamMembersPerProjectIdAndTeamId(
+    projectId: string,
+    teamId: string
+  ): Promise<TeamMember[]> {
+    let teamMembers: TeamMember[] = [];
+
+    await this._coreApi
+      ?.getTeamMembersWithExtendedProperties(projectId, teamId)
+      .then(async (teamTeamMembers) => {
+        teamMembers.push(
+          ...teamTeamMembers.map((member) =>
+            TeamMemberConverter.ConvertToTeamMember(member)
+          )
+        );
+      });
+
+    return teamMembers;
   }
 }

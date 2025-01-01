@@ -4,8 +4,8 @@ import { TeamMember as AzdoTeamMember } from "azure-devops-node-api/interfaces/c
 export default class TeamMemberConverter {
   static ConvertToTeamMember(azdoTeamMember: AzdoTeamMember): TeamMember {
     return {
-      guid: azdoTeamMember.identity?.id || "",
-      name: azdoTeamMember.identity?.displayName || "",
+      guid: azdoTeamMember.identity?.id ?? "",
+      name: azdoTeamMember.identity?.displayName ?? "",
     };
   }
 }

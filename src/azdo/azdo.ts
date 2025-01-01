@@ -3,7 +3,7 @@ import { IRequestHandler } from "azure-devops-node-api/interfaces/common/VsoBase
 import { Identity } from "azure-devops-node-api/interfaces/IdentitiesInterfaces";
 
 export class Azdo {
-  private _authHandler: IRequestHandler;
+  private readonly _authHandler: IRequestHandler;
   public connection: azdev.WebApi;
   public authenticatedUser: Identity | undefined;
 

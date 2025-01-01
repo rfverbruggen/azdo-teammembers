@@ -3,10 +3,10 @@ import { Azdo } from "./azdo";
 import { SETTINGS_ORGURL, SETTINGS_SECTION } from "../constants";
 
 export class CredentialStore implements vscode.Disposable {
-  private _disposables: vscode.Disposable[];
+  private readonly _disposables: vscode.Disposable[];
   private _azdoAPI: Azdo | undefined;
   private _orgUrl: string | undefined;
-  private _sessionOptions: vscode.AuthenticationGetSessionOptions = {
+  private readonly _sessionOptions: vscode.AuthenticationGetSessionOptions = {
     createIfNone: true,
   };
 
