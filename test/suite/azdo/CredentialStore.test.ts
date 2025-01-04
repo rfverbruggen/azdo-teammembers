@@ -14,14 +14,11 @@ suite("CredentialStore Tests", () => {
   let credentialStore: CredentialStore;
   let getSessionStub: sinon.SinonStub;
   let getTokenStub: sinon.SinonStub;
-  let showErrorMessageStub: sinon.SinonStub;
   let azdoHubStub: sinon.SinonStubbedInstance<IAzDOHub>;
 
   beforeEach(() => {
     credentialStore = new CredentialStore();
     getSessionStub = sinon.stub(vscode.authentication, "getSession");
-    getTokenStub = sinon.stub(credentialStore as any, "getToken");
-    showErrorMessageStub = sinon.stub(vscode.window, "showErrorMessage");
     azdoHubStub = sinon.createStubInstance<IAzDOHub>(AzDOHub);
   });
 
@@ -79,7 +76,6 @@ suite("CredentialStore Tests", () => {
       get: () => "orgUrl",
     } as any);
     getSessionStub.resolves({} as vscode.AuthenticationSession);
-    getTokenStub.resolves(undefined);
 
     // Act.
     const result = await credentialStore.Login();
@@ -107,8 +103,9 @@ suite("CredentialStore Tests", () => {
     sinon.stub(vscode.workspace, "getConfiguration").returns({
       get: () => "orgUrl",
     } as any);
-    getSessionStub.resolves({} as vscode.AuthenticationSession);
-    getTokenStub.resolves("token");
+    getSessionStub.resolves({
+      accessToken: "token",
+    } as vscode.AuthenticationSession);
 
     const webApiStub = sinon.createStubInstance<WebApi>(WebApi);
     webApiStub.connect.resolves({
