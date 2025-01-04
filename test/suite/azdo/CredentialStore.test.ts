@@ -57,12 +57,59 @@ suite("CredentialStore Tests", () => {
   });
 
   test("dispose should dispose all disposables", () => {
+    // Arrange.
     const disposable1 = { dispose: sinon.spy() };
     const disposable2 = { dispose: sinon.spy() };
     (credentialStore as any)._disposables.push(disposable1, disposable2);
 
+    // Act.
     credentialStore.dispose();
+
+    // Assert.
     assert(disposable1.dispose.calledOnce);
     assert(disposable2.dispose.calledOnce);
+  });
+
+  test("Login should return undefined if no session is returned", async () => {
+    // Arrange.
+    sinon.stub(vscode.workspace, "getConfiguration").returns({
+      get: () => "orgUrl",
+    } as any);
+    getSessionStub.resolves(undefined);
+
+    // Act.
+    const result = await credentialStore.Login();
+
+    // Assert.
+    assert.strictEqual(result, undefined);
+  });
+
+  test("Login should return undefined if no token is returned", async () => {
+    // Arrange.
+    sinon.stub(vscode.workspace, "getConfiguration").returns({
+      get: () => "orgUrl",
+    } as any);
+    getSessionStub.resolves({} as vscode.AuthenticationSession);
+    getTokenStub.resolves(undefined);
+
+    // Act.
+    const result = await credentialStore.Login();
+
+    // Assert.
+    assert.strictEqual(result, undefined);
+  });
+
+  test("Login should return undefined if user cancels authentication", async () => {
+    // Arrange.
+    sinon.stub(vscode.workspace, "getConfiguration").returns({
+      get: () => "orgUrl",
+    } as any);
+    getSessionStub.rejects(new Error("User canceled authentication"));
+
+    // Act.
+    const result = await credentialStore.Login();
+
+    // Assert.
+    assert.strictEqual(result, undefined);
   });
 });
