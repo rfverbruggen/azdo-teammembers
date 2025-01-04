@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { SETTINGS_ORGURL, SETTINGS_SECTION } from "../constants";
 import { ICredentialStore } from "../interfaces/ICredentialStore";
 import { IAzDOHub } from "../interfaces/IAzDOHub";
-import { AzDOHub } from "./azdo";
+import { AzDOHub } from "./AzDOHub";
 
 export class CredentialStore implements ICredentialStore, vscode.Disposable {
   private readonly _disposables: vscode.Disposable[];

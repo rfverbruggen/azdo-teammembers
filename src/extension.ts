@@ -6,7 +6,7 @@ import {
 } from "./providers";
 import ConfigurationTeamMemberRepository from "./repositories/ConfigurationTeamMemberRepository";
 import TeamMemberFactory from "./factories/TeamMemberFactory";
-import { CredentialStore } from "./azdo/credentials";
+import { CredentialStore } from "./azdo/CredentialStore";
 import { SETTINGS_SECTION, SETTINGS_ORGURL } from "./constants";
 import AzDOTeamMemberRepository from "./repositories/AzDOTeamMemberRepository";
 
