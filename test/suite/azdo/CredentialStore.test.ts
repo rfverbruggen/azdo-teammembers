@@ -5,6 +5,10 @@ import { CredentialStore } from "../../../src/azdo/CredentialStore";
 import { IAzDOHub } from "../../../src/interfaces/IAzDOHub";
 import { suite, test, beforeEach, afterEach } from "mocha";
 import { AzDOHub } from "../../../src/azdo/AzDOHub";
+import * as azdev from "azure-devops-node-api";
+import { IRequestHandler } from "azure-devops-node-api/interfaces/common/VsoBaseInterfaces";
+import { ConnectionData } from "azure-devops-node-api/interfaces/LocationsInterfaces";
+import { WebApi } from "azure-devops-node-api";
 
 suite("CredentialStore Tests", () => {
   let credentialStore: CredentialStore;
@@ -31,21 +35,6 @@ suite("CredentialStore Tests", () => {
       .resolves(azdoHubStub);
     await credentialStore.Initialize();
     assert(loginStub.calledOnce);
-  });
-
-  test("IsAuthenticated should return true if _azdoAPI is set", () => {
-    (credentialStore as any)._azdoAPI = azdoHubStub;
-    assert.strictEqual(credentialStore.IsAuthenticated(), true);
-  });
-
-  test("IsAuthenticated should return false if _azdoAPI is not set", () => {
-    (credentialStore as any)._azdoAPI = undefined;
-    assert.strictEqual(credentialStore.IsAuthenticated(), false);
-  });
-
-  test("GetHub should return _azdoAPI", () => {
-    (credentialStore as any)._azdoAPI = azdoHubStub;
-    assert.strictEqual(credentialStore.GetHub(), azdoHubStub);
   });
 
   test("Login should return undefined if no orgUrl is set", async () => {
@@ -111,5 +100,29 @@ suite("CredentialStore Tests", () => {
 
     // Assert.
     assert.strictEqual(result, undefined);
+  });
+
+  test("Login should return azdoHub if all conditions are met", async () => {
+    // Arrange.
+    sinon.stub(vscode.workspace, "getConfiguration").returns({
+      get: () => "orgUrl",
+    } as any);
+    getSessionStub.resolves({} as vscode.AuthenticationSession);
+    getTokenStub.resolves("token");
+
+    const webApiStub = sinon.createStubInstance<WebApi>(WebApi);
+    webApiStub.connect.resolves({
+      authenticatedUser: { id: "1" },
+    } as ConnectionData);
+
+    sinon.stub(azdev, "getBearerHandler").returns({} as IRequestHandler);
+    sinon.stub(azdev, "WebApi").returns(webApiStub);
+
+    // Act.
+    const result = await credentialStore.Login();
+
+    // Assert.
+    assert.strictEqual((result as AzDOHub).authenticatedUser?.id, "1");
+    assert.strictEqual((result as AzDOHub).orgUrl, "orgUrl");
   });
 });
