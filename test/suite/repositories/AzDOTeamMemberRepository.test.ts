@@ -12,7 +12,10 @@ import {
   TeamProjectReference,
   WebApiTeam,
 } from "azure-devops-node-api/interfaces/CoreInterfaces";
-import { TeamMember as AzdoTeamMember } from "azure-devops-node-api/interfaces/common/VSSInterfaces";
+import {
+  TeamMember as AzdoTeamMember,
+  IdentityRef,
+} from "azure-devops-node-api/interfaces/common/VSSInterfaces";
 
 suite("AzDOTeamMemberRepository", () => {
   let credentialStoreStub: sinon.SinonStubbedInstance<ICredentialStore>;
@@ -66,7 +69,7 @@ suite("AzDOTeamMemberRepository", () => {
       credentialStoreStub.GetHub.returns(azDOHubStub);
 
       // Act.
-      await repository.Ensure();
+      repository = await repository.Ensure();
 
       // Assert.
       assert.notStrictEqual(repository["_hub"], undefined);
@@ -90,7 +93,7 @@ suite("AzDOTeamMemberRepository", () => {
       credentialStoreStub.IsAuthenticated.returns(true);
       credentialStoreStub.GetHub.returns(azDOHubStub);
 
-      repository.Ensure();
+      repository = await repository.Ensure();
 
       // Act.
       const result = await repository.GetTeamMembers();
@@ -101,7 +104,9 @@ suite("AzDOTeamMemberRepository", () => {
 
     test("should return empty array if no teams found", async () => {
       // Arrange.
-      const projects: TeamProjectReference[] = [{ id: "1" }];
+      const projects: TeamProjectReference[] = [
+        { id: "1" } as TeamProjectReference,
+      ];
       const teams: WebApiTeam[] = [];
 
       coreApiStub.getProjects.resolves(projects);
@@ -112,7 +117,7 @@ suite("AzDOTeamMemberRepository", () => {
       credentialStoreStub.IsAuthenticated.returns(true);
       credentialStoreStub.GetHub.returns(azDOHubStub);
 
-      repository.Ensure();
+      repository = await repository.Ensure();
 
       // Act.
       const result = await repository.GetTeamMembers();
@@ -136,7 +141,7 @@ suite("AzDOTeamMemberRepository", () => {
       credentialStoreStub.IsAuthenticated.returns(true);
       credentialStoreStub.GetHub.returns(azDOHubStub);
 
-      repository.Ensure();
+      repository = await repository.Ensure();
 
       // Act.
       const result = await repository.GetTeamMembers();
@@ -144,6 +149,70 @@ suite("AzDOTeamMemberRepository", () => {
       // Assert.
       assert.strictEqual(result.length, 0);
       assert.deepEqual(coreApiStub.getTeams.notCalled, true);
+    });
+
+    test("should return team members if found", async () => {
+      // Arrange.
+      const projects: TeamProjectReference[] = [
+        { id: "1" } as TeamProjectReference,
+      ];
+      const teams: WebApiTeam[] = [{ id: "1" } as WebApiTeam];
+      const teamMembers: AzdoTeamMember[] = [
+        {
+          identity: { displayName: "test", id: "1" } as IdentityRef,
+        } as AzdoTeamMember,
+      ];
+
+      coreApiStub.getProjects.resolves(projects);
+      coreApiStub.getTeams.resolves(teams);
+      coreApiStub.getTeamMembersWithExtendedProperties.resolves(teamMembers);
+
+      webApiStub.getCoreApi.resolves(coreApiStub);
+      azDOHubStub.connection = webApiStub;
+      credentialStoreStub.IsAuthenticated.returns(true);
+      credentialStoreStub.GetHub.returns(azDOHubStub);
+
+      repository = await repository.Ensure();
+
+      // Act.
+      const result = await repository.GetTeamMembers();
+
+      // Assert.
+      assert.strictEqual(result.length, 1);
+      assert.deepEqual(result[0].guid, teamMembers[0]?.identity?.id);
+    });
+
+    test("should return unique team members", async () => {
+      // Arrange.
+      const projects: TeamProjectReference[] = [
+        { id: "1" } as TeamProjectReference,
+      ];
+      const teams: WebApiTeam[] = [{ id: "1" } as WebApiTeam];
+      const teamMembers: AzdoTeamMember[] = [
+        {
+          identity: { displayName: "test", id: "1" } as IdentityRef,
+        } as AzdoTeamMember,
+        {
+          identity: { displayName: "test", id: "1" } as IdentityRef,
+        } as AzdoTeamMember,
+      ];
+
+      coreApiStub.getProjects.resolves(projects);
+      coreApiStub.getTeams.resolves(teams);
+      coreApiStub.getTeamMembersWithExtendedProperties.resolves(teamMembers);
+
+      webApiStub.getCoreApi.resolves(coreApiStub);
+      azDOHubStub.connection = webApiStub;
+      credentialStoreStub.IsAuthenticated.returns(true);
+      credentialStoreStub.GetHub.returns(azDOHubStub);
+
+      repository = await repository.Ensure();
+
+      // Act.
+      const result = await repository.GetTeamMembers();
+
+      // Assert.
+      assert.strictEqual(result.length, 1);
     });
   });
 });
