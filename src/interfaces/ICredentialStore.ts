@@ -1,8 +1,8 @@
-import { Azdo } from "../azdo/azdo";
+import { IAzDOHub } from "../interfaces/IAzDOHub";
 
 export interface ICredentialStore {
   Initialize(): Promise<void>;
   IsAuthenticated(): boolean;
-  GetHub(): Azdo | undefined;
-  Login(): Promise<Azdo | undefined>;
+  GetHub(): IAzDOHub | undefined;
+  Login(): Promise<IAzDOHub | undefined>;
 }

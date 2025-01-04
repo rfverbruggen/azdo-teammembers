@@ -1,12 +1,12 @@
-import { Azdo } from "../azdo/azdo";
 import { ICredentialStore } from "../interfaces/ICredentialStore";
 import TeamMemberConverter from "../converters/TeamMemberConverter";
 import { ITeamMemberRepository } from "../interfaces/ITeamMemberRepository";
 import { TeamMember } from "../models/TeamMember";
 import { ICoreApi } from "azure-devops-node-api/CoreApi";
+import { IAzDOHub } from "../interfaces/IAzDOHub";
 
 export default class AzDOTeamMemberRepository implements ITeamMemberRepository {
-  private _hub: Azdo | undefined;
+  private _hub: IAzDOHub | undefined;
   private _coreApi?: ICoreApi;
 
   constructor(private readonly _credentialStore: ICredentialStore) {}

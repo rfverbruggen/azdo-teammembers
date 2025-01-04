@@ -1,11 +1,12 @@
 import * as vscode from "vscode";
-import { Azdo } from "./azdo";
 import { SETTINGS_ORGURL, SETTINGS_SECTION } from "../constants";
 import { ICredentialStore } from "../interfaces/ICredentialStore";
+import { IAzDOHub } from "../interfaces/IAzDOHub";
+import { AzDOHub } from "./azdo";
 
 export class CredentialStore implements ICredentialStore, vscode.Disposable {
   private readonly _disposables: vscode.Disposable[];
-  private _azdoAPI: Azdo | undefined;
+  private _azdoAPI: IAzDOHub | undefined;
   private _orgUrl: string | undefined;
   private readonly _sessionOptions: vscode.AuthenticationGetSessionOptions = {
     createIfNone: true,
@@ -30,11 +31,11 @@ export class CredentialStore implements ICredentialStore, vscode.Disposable {
     return !!this._azdoAPI;
   }
 
-  public GetHub(): Azdo | undefined {
+  public GetHub(): IAzDOHub | undefined {
     return this._azdoAPI;
   }
 
-  public async Login(): Promise<Azdo | undefined> {
+  public async Login(): Promise<IAzDOHub | undefined> {
     this._orgUrl = vscode.workspace
       .getConfiguration(SETTINGS_SECTION)
       .get<string | undefined>(SETTINGS_ORGURL);
@@ -59,7 +60,7 @@ export class CredentialStore implements ICredentialStore, vscode.Disposable {
           return undefined;
         }
 
-        const azdo = new Azdo(this._orgUrl, token);
+        const azdo = new AzDOHub(this._orgUrl, token);
         azdo.authenticatedUser = (
           await azdo.connection.connect()
         ).authenticatedUser;
