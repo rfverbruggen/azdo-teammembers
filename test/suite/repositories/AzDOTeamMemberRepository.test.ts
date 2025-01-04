@@ -1,12 +1,12 @@
-import { suite, test, beforeEach } from "mocha";
+import { suite, test, beforeEach, afterEach } from "mocha";
 import * as assert from "assert";
 import AzDOTeamMemberRepository from "../../../src/repositories/AzDOTeamMemberRepository";
 import { ICredentialStore } from "../../../src/interfaces/ICredentialStore";
 import { CoreApi, ICoreApi } from "azure-devops-node-api/CoreApi";
 import sinon = require("sinon");
-import { CredentialStore } from "../../../src/azdo/credentials";
+import { CredentialStore } from "../../../src/azdo/CredentialStore";
 import { IAzDOHub } from "../../../src/interfaces/IAzDOHub";
-import { AzDOHub } from "../../../src/azdo/azdo";
+import { AzDOHub } from "../../../src/azdo/AzDOHub";
 import { WebApi } from "azure-devops-node-api";
 import {
   TeamProjectReference,
@@ -28,6 +28,10 @@ suite("AzDOTeamMemberRepository", () => {
     azDOHubStub = sinon.createStubInstance<IAzDOHub>(AzDOHub);
     webApiStub = sinon.createStubInstance<WebApi>(WebApi);
     repository = new AzDOTeamMemberRepository(credentialStoreStub);
+  });
+
+  afterEach(() => {
+    sinon.restore();
   });
 
   suite("Ensure", () => {
