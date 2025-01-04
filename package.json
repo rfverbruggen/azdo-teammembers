@@ -28,10 +28,12 @@
       "properties": {
         "azdo-teammembers.teammembers": {
           "type": "array",
-          "default": []
+          "default": [],
+          "description": "List of team members for offline use."
         },
         "azdo-teammembers.orgUrl": {
-          "type": "string"
+          "type": "string",
+          "description": "URL of the Azure DevOps organization."
         }
       }
     }
