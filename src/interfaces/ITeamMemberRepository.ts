@@ -1,5 +1,5 @@
 import { TeamMember } from "../models/TeamMember";
 
 export interface ITeamMemberRepository {
-  GetTeamMembers(): TeamMember[];
+  GetTeamMembers(): TeamMember[] | Promise<TeamMember[]>;
 }

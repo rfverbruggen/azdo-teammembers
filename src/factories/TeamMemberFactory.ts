@@ -9,13 +9,20 @@ export default class TeamMemberFactory implements ITeamMemberFactory {
     this._teamMemberRepositories.push(teamMemberRepository);
   }
 
-  GetTeamMembers(): TeamMember[] {
+  async GetTeamMembers(): Promise<TeamMember[]> {
     let teamMembers: TeamMember[] = [];
 
-    this._teamMemberRepositories.forEach((teamMemberRepository) => {
-      teamMembers = teamMembers.concat(teamMemberRepository.GetTeamMembers());
-    });
+    for (const teamMemberRepository of this._teamMemberRepositories) {
+      teamMembers = teamMembers.concat(
+        await teamMemberRepository.GetTeamMembers()
+      );
+    }
 
-    return teamMembers;
+    const uniqueTeamMembers = teamMembers.filter(
+      (teamMember, i) =>
+        teamMembers.findIndex((s) => teamMember.guid === s.guid) === i
+    );
+
+    return uniqueTeamMembers;
   }
 }

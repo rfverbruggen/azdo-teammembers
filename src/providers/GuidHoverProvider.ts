@@ -4,11 +4,11 @@ import { ITeamMemberFactory } from "../interfaces/ITeamMemberFactory";
 export class GuidHoverProvider implements vscode.HoverProvider {
   constructor(private readonly _teamMemberFactory: ITeamMemberFactory) {}
 
-  provideHover(
+  async provideHover(
     document: vscode.TextDocument,
     position: vscode.Position,
     _token: vscode.CancellationToken
-  ): vscode.ProviderResult<vscode.Hover> {
+  ) {
     const regex = new RegExp(/@<(?<guid>[a-zA-Z0-9-]+)>/g);
 
     const range = document.getWordRangeAtPosition(position, regex);
@@ -20,11 +20,11 @@ export class GuidHoverProvider implements vscode.HoverProvider {
 
     if (guid) {
       // Find the name based on the guid
-      let name = this._teamMemberFactory
-        .GetTeamMembers()
-        .find(
-          (member) => member.guid.toUpperCase() === guid.toUpperCase()
-        )?.name;
+      const teamMembers = await this._teamMemberFactory.GetTeamMembers();
+
+      let name = teamMembers.find(
+        (member) => member.guid.toUpperCase() === guid.toUpperCase()
+      )?.name;
 
       if (name) {
         return new vscode.Hover({ language: "azdo-teammember", value: name });

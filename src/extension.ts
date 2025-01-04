@@ -6,14 +6,35 @@ import {
 } from "./providers";
 import ConfigurationTeamMemberRepository from "./repositories/ConfigurationTeamMemberRepository";
 import TeamMemberFactory from "./factories/TeamMemberFactory";
+import { CredentialStore } from "./azdo/CredentialStore";
+import { SETTINGS_SECTION, SETTINGS_ORGURL } from "./constants";
+import AzDOTeamMemberRepository from "./repositories/AzDOTeamMemberRepository";
 
 let disposables: vscode.Disposable[] = [];
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
   const teamMemberFactory = new TeamMemberFactory();
   teamMemberFactory.AddTeamMemberRepository(
     new ConfigurationTeamMemberRepository()
   );
+
+  const orgUrl = vscode.workspace
+    .getConfiguration(SETTINGS_SECTION)
+    .get<string | undefined>(SETTINGS_ORGURL);
+
+  if (orgUrl) {
+    const credentialStore = new CredentialStore();
+    context.subscriptions.push(credentialStore);
+    await credentialStore.Initialize();
+
+    const azdoTeamMemberRepository = new AzDOTeamMemberRepository(
+      credentialStore
+    );
+
+    teamMemberFactory.AddTeamMemberRepository(
+      await azdoTeamMemberRepository.Ensure()
+    );
+  }
 
   const registeredCompletionItemProvider =
     vscode.languages.registerCompletionItemProvider(
