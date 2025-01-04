@@ -73,4 +73,77 @@ suite("AzDOTeamMemberRepository", () => {
       assert.notStrictEqual(repository["_coreApi"], undefined);
     });
   });
+
+  suite("GetTeamMembers", () => {
+    test("should return empty array if no team members found", async () => {
+      // Arrange.
+      const projects: TeamProjectReference[] = [{ id: "1" }];
+      const teams: WebApiTeam[] = [{ id: "1" }];
+      const teamMembers: AzdoTeamMember[] = [];
+
+      coreApiStub.getProjects.resolves(projects);
+      coreApiStub.getTeams.resolves(teams);
+      coreApiStub.getTeamMembersWithExtendedProperties.resolves(teamMembers);
+
+      webApiStub.getCoreApi.resolves(coreApiStub);
+      azDOHubStub.connection = webApiStub;
+      credentialStoreStub.IsAuthenticated.returns(true);
+      credentialStoreStub.GetHub.returns(azDOHubStub);
+
+      repository.Ensure();
+
+      // Act.
+      const result = await repository.GetTeamMembers();
+
+      // Assert.
+      assert.strictEqual(result.length, 0);
+    });
+
+    test("should return empty array if no teams found", async () => {
+      // Arrange.
+      const projects: TeamProjectReference[] = [{ id: "1" }];
+      const teams: WebApiTeam[] = [];
+
+      coreApiStub.getProjects.resolves(projects);
+      coreApiStub.getTeams.resolves(teams);
+
+      webApiStub.getCoreApi.resolves(coreApiStub);
+      azDOHubStub.connection = webApiStub;
+      credentialStoreStub.IsAuthenticated.returns(true);
+      credentialStoreStub.GetHub.returns(azDOHubStub);
+
+      repository.Ensure();
+
+      // Act.
+      const result = await repository.GetTeamMembers();
+
+      // Assert.
+      assert.strictEqual(result.length, 0);
+      assert.deepEqual(
+        coreApiStub.getTeamMembersWithExtendedProperties.notCalled,
+        true
+      );
+    });
+
+    test("should return empty array if no projects found", async () => {
+      // Arrange.
+      const projects: TeamProjectReference[] = [];
+
+      coreApiStub.getProjects.resolves(projects);
+
+      webApiStub.getCoreApi.resolves(coreApiStub);
+      azDOHubStub.connection = webApiStub;
+      credentialStoreStub.IsAuthenticated.returns(true);
+      credentialStoreStub.GetHub.returns(azDOHubStub);
+
+      repository.Ensure();
+
+      // Act.
+      const result = await repository.GetTeamMembers();
+
+      // Assert.
+      assert.strictEqual(result.length, 0);
+      assert.deepEqual(coreApiStub.getTeams.notCalled, true);
+    });
+  });
 });
