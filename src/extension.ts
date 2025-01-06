@@ -12,6 +12,7 @@ import {
   SETTINGS_ORGURL,
   EXTENSTION_ID,
   CACHE_KEY,
+  SETTINGS_CACHE_DURATION,
 } from "./constants";
 import AzDOTeamMemberRepository from "./repositories/AzDOTeamMemberRepository";
 import CachedRepository from "./repositories/CachedRepository";
@@ -42,11 +43,15 @@ export async function activate(context: vscode.ExtensionContext) {
 
     const cache = new Cache(context, EXTENSTION_ID);
 
+    const cacheDuration = vscode.workspace
+      .getConfiguration(SETTINGS_SECTION)
+      .get<number>(SETTINGS_CACHE_DURATION, 86400); // By default cache the team members for 24 hours
+
     const cachedAzDOTeamMemberRepository = new CachedRepository(
       cache,
       azdoTeamMemberRepository,
       CACHE_KEY,
-      86400 // Cache the team members for 24 hours
+      cacheDuration
     );
 
     teamMemberFactory.AddTeamMemberRepository(cachedAzDOTeamMemberRepository);
