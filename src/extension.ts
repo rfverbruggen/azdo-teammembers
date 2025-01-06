@@ -7,8 +7,15 @@ import {
 import ConfigurationTeamMemberRepository from "./repositories/ConfigurationTeamMemberRepository";
 import TeamMemberFactory from "./factories/TeamMemberFactory";
 import { CredentialStore } from "./azdo/CredentialStore";
-import { SETTINGS_SECTION, SETTINGS_ORGURL } from "./constants";
+import {
+  SETTINGS_SECTION,
+  SETTINGS_ORGURL,
+  EXTENSTION_ID,
+  CACHE_KEY,
+} from "./constants";
 import AzDOTeamMemberRepository from "./repositories/AzDOTeamMemberRepository";
+import CachedRepository from "./repositories/CachedRepository";
+import Cache from "./cache/Cache";
 
 let disposables: vscode.Disposable[] = [];
 
@@ -31,9 +38,18 @@ export async function activate(context: vscode.ExtensionContext) {
       credentialStore
     );
 
-    teamMemberFactory.AddTeamMemberRepository(
-      await azdoTeamMemberRepository.Ensure()
+    await azdoTeamMemberRepository.Ensure();
+
+    const cache = new Cache(context, EXTENSTION_ID);
+
+    const cachedAzDOTeamMemberRepository = new CachedRepository(
+      cache,
+      azdoTeamMemberRepository,
+      CACHE_KEY,
+      86400 // Cache the team members for 24 hours
     );
+
+    teamMemberFactory.AddTeamMemberRepository(cachedAzDOTeamMemberRepository);
   }
 
   const registeredCompletionItemProvider =
