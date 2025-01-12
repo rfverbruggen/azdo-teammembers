@@ -26,7 +26,11 @@ export default class Cache implements ICache {
     } else {
       // Is item expired?
       if (this.IsExpired(key)) {
-        return undefined;
+        if (typeof defaultValue !== "undefined") {
+          return defaultValue;
+        } else {
+          return undefined;
+        }
       }
       // Otherwise return the value
       return this._cache[key].value;
@@ -64,7 +68,7 @@ export default class Cache implements ICache {
   Delete(key: string) {
     // Does item exist?
     if (typeof this._cache[key] === "undefined") {
-      return Promise.resolve(true);
+      return;
     }
 
     // Delete from local object
@@ -77,7 +81,9 @@ export default class Cache implements ICache {
   ReadAll() {
     let items: { [key: string]: any } = {};
     for (let key in this._cache) {
-      items[key] = this._cache[key].value;
+      if (!this.IsExpired(key)) {
+        items[key] = this._cache[key].value;
+      }
     }
     return items;
   }
