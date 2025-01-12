@@ -42,7 +42,13 @@ export default class Cache implements ICache {
   }
 
   Create(key: string, value: any, expiration?: number) {
-    let obj = { value: value, expiration: expiration };
+    let exp;
+
+    if (typeof expiration !== "undefined") {
+      exp = this.now() + expiration;
+    }
+
+    let obj = { value: value, expiration: exp };
 
     // Save to local cache object
     this._cache[key] = obj;
