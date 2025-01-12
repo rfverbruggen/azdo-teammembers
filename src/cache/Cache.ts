@@ -14,7 +14,7 @@ export default class Cache implements ICache {
     this._cache = this._context.globalState.get(this._namespace, {});
   }
 
-  Read(key: string, defaultValue?: object) {
+  Read(key: string, defaultValue?: any) {
     // If doesn't exist
     if (typeof this._cache[key] === "undefined") {
       // Return default value
@@ -41,7 +41,7 @@ export default class Cache implements ICache {
     }
   }
 
-  Create(key: string, value: object, expiration?: number) {
+  Create(key: string, value: any, expiration?: number) {
     let obj = { value: value, expiration: expiration };
 
     // Save to local cache object
@@ -51,7 +51,7 @@ export default class Cache implements ICache {
     return this._context.globalState.update(this._namespace, this._cache);
   }
 
-  Update(key: string, value: object, expiration?: number) {
+  Update(key: string, value: any, expiration?: number) {
     return this.Create(key, value, expiration);
   }
 
