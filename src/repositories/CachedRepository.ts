@@ -4,10 +4,10 @@ import { TeamMember } from "../models/TeamMember";
 
 export default class CachedRepository implements ITeamMemberRepository {
   constructor(
-    private _cache: ICache,
-    private _teamMemberRepository: ITeamMemberRepository,
-    private _key: string,
-    private _expiration: number
+    private readonly _cache: ICache,
+    private readonly _teamMemberRepository: ITeamMemberRepository,
+    private readonly _key: string,
+    private readonly _expiration: number
   ) {}
 
   async GetTeamMembers(): Promise<TeamMember[]> {

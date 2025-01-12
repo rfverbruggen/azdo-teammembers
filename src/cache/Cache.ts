@@ -6,11 +6,11 @@ export class CacheObject implements ICacheObject {
 }
 
 export default class Cache implements ICache {
-  private _namespace: string;
+  private readonly _namespace: string;
   private _cache: CacheObject = {};
 
   constructor(private readonly _context: ExtensionContext, namespace?: string) {
-    this._namespace = namespace || "default";
+    this._namespace = namespace ?? "default";
     this._cache = this._context.globalState.get(this._namespace, {});
   }
 
@@ -37,7 +37,7 @@ export default class Cache implements ICache {
     if (typeof this._cache[key] === "undefined") {
       return false;
     } else {
-      return this.IsExpired(key) ? false : true;
+      return !this.IsExpired(key);
     }
   }
 

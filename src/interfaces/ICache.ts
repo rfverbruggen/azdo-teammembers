@@ -15,7 +15,7 @@ export interface ICache {
 
   DeleteAll(): void;
 
-  GetExpiration(key: string): Number | undefined;
+  GetExpiration(key: string): number | undefined;
 
   IsExpired(key: string): boolean;
 }
