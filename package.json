@@ -34,6 +34,11 @@
         "azdo-teammembers.orgUrl": {
           "type": "string",
           "description": "URL of the Azure DevOps organization."
+        },
+        "azdo-teammembers.cache-duration": {
+          "type": "number",
+          "description": "The number of seconds a cached value is valid.",
+          "default": 86400
         }
       }
     }
