@@ -58,9 +58,7 @@ export default class Cache implements ICache {
   Delete(key: string) {
     // Does item exist?
     if (typeof this._cache[key] === "undefined") {
-      return new Promise(function (resolve, reject) {
-        resolve(true);
-      });
+      return Promise.resolve(true);
     }
 
     // Delete from local object
