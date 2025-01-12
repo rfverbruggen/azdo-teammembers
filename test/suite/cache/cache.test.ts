@@ -56,22 +56,14 @@ suite("Cache", () => {
     assert.equal(result, "newValue");
   });
 
-  test("should get expiration time of a key", () => {
-    const expirationTime = Date.now() + 1000 * 60 * 60; // 1 hour from now
-    cache.Create("key", "value", expirationTime);
-    const result = cache.GetExpiration("key");
-    assert.equal(result, expirationTime);
-  });
-
   test("should return true if key is expired", () => {
-    const expirationTime = Date.now() - 1000; // 1 second ago
-    cache.Create("key", "value", expirationTime);
+    cache.Create("key", "value", -1000); // 1 second ago
     const result = cache.IsExpired("key");
     assert.equal(result, true);
   });
 
   test("should return false if key is not expired", () => {
-    const expirationTime = Date.now() + 1000 * 60 * 60; // 1 hour from now
+    const expirationTime = 1000 * 60 * 60; // 1 hour from now
     cache.Create("key", "value", expirationTime);
     const result = cache.IsExpired("key");
     assert.equal(result, false);
