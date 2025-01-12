@@ -1,33 +1,87 @@
-import * as vscode from 'vscode';
-import { GuidCompletionItemProvider, GuidCodeLensProvider, GuidHoverProvider } from './providers';
+import * as vscode from "vscode";
+import {
+  GuidCompletionItemProvider,
+  GuidCodeLensProvider,
+  GuidHoverProvider,
+} from "./providers";
+import ConfigurationTeamMemberRepository from "./repositories/ConfigurationTeamMemberRepository";
+import TeamMemberFactory from "./factories/TeamMemberFactory";
+import { CredentialStore } from "./azdo/CredentialStore";
+import {
+  SETTINGS_SECTION,
+  SETTINGS_ORGURL,
+  EXTENSTION_ID,
+  CACHE_KEY,
+  SETTINGS_CACHE_DURATION,
+} from "./constants";
+import AzDOTeamMemberRepository from "./repositories/AzDOTeamMemberRepository";
+import CachedRepository from "./repositories/CachedRepository";
+import Cache from "./cache/Cache";
 
 let disposables: vscode.Disposable[] = [];
 
-export function activate(context: vscode.ExtensionContext) {
-	const registeredCompletionItemProvider = vscode.languages.registerCompletionItemProvider(
-		"markdown",
-		new GuidCompletionItemProvider(),
-		"@"
-	);
+export async function activate(context: vscode.ExtensionContext) {
+  const teamMemberFactory = new TeamMemberFactory();
+  teamMemberFactory.AddTeamMemberRepository(
+    new ConfigurationTeamMemberRepository()
+  );
 
-	const registeredCodeLensProvider = vscode.languages.registerCodeLensProvider(
-		"markdown",
-		new GuidCodeLensProvider()
-	);
+  const orgUrl = vscode.workspace
+    .getConfiguration(SETTINGS_SECTION)
+    .get<string | undefined>(SETTINGS_ORGURL);
 
-	const registeredHoverProvider = vscode.languages.registerHoverProvider(
-		"markdown",
-		new GuidHoverProvider()
-	);
+  if (orgUrl) {
+    const credentialStore = new CredentialStore();
+    context.subscriptions.push(credentialStore);
+    await credentialStore.Initialize();
 
-	context.subscriptions.push(registeredCompletionItemProvider);
-	context.subscriptions.push(registeredCodeLensProvider);
-	context.subscriptions.push(registeredHoverProvider);
+    const azdoTeamMemberRepository = new AzDOTeamMemberRepository(
+      credentialStore
+    );
+
+    await azdoTeamMemberRepository.Ensure();
+
+    const cache = new Cache(context, EXTENSTION_ID);
+
+    const cacheDuration = vscode.workspace
+      .getConfiguration(SETTINGS_SECTION)
+      .get<number>(SETTINGS_CACHE_DURATION, 86400); // By default cache the team members for 24 hours
+
+    const cachedAzDOTeamMemberRepository = new CachedRepository(
+      cache,
+      azdoTeamMemberRepository,
+      CACHE_KEY,
+      cacheDuration
+    );
+
+    teamMemberFactory.AddTeamMemberRepository(cachedAzDOTeamMemberRepository);
+  }
+
+  const registeredCompletionItemProvider =
+    vscode.languages.registerCompletionItemProvider(
+      "markdown",
+      new GuidCompletionItemProvider(teamMemberFactory),
+      "@"
+    );
+
+  const registeredCodeLensProvider = vscode.languages.registerCodeLensProvider(
+    "markdown",
+    new GuidCodeLensProvider(teamMemberFactory)
+  );
+
+  const registeredHoverProvider = vscode.languages.registerHoverProvider(
+    "markdown",
+    new GuidHoverProvider(teamMemberFactory)
+  );
+
+  context.subscriptions.push(registeredCompletionItemProvider);
+  context.subscriptions.push(registeredCodeLensProvider);
+  context.subscriptions.push(registeredHoverProvider);
 }
 
 export function deactivate() {
-	if (disposables) {
-		disposables.forEach(item => item.dispose());
-	}
-	disposables = [];
+  if (disposables) {
+    disposables.forEach((item) => item.dispose());
+  }
+  disposables = [];
 }
