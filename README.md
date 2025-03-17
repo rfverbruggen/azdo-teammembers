@@ -45,10 +45,14 @@ Add your team members to the VS Code settings.
 }
 ```
 
-## Extension Settings
+## Extension settings
 
 This extension contributes the following settings:
 
 - `azdo-teammembers.orgUrl`: add the url to your Azure DevOps organisation (e.g. `https://dev.azure.com/[organization]/`)
 - `azdo-teammembers.teammembers`: add a list of team members to the extension
 - `azdo-teammembers.cache-duration`: the number of seconds the cached objects are valid. Defaults to 24 hours.
+
+## Extension commands
+
+- `azdo-teammembers.refreshCache`: refresh the team member repository cache.
