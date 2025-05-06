@@ -40,7 +40,7 @@ jobs:
         uses: actions/setup-node@v4
       - run: npm install
       - run: xvfb-run -a npm test
-      - uses: SonarSource/sonarqube-scan-action@v5.1.0
+      - uses: SonarSource/sonarqube-scan-action@v5.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
