@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
       - name: Install Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
       - run: npm install
       - run: xvfb-run -a npm test
         if: runner.os == 'Linux'
@@ -37,7 +37,7 @@ jobs:
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - name: Install Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
       - run: npm install
       - run: xvfb-run -a npm test
       - uses: SonarSource/sonarqube-scan-action@v6.0.0
@@ -53,7 +53,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
       - name: Install Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: "lts/*"
       - run: npm install
