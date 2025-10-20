@@ -68,7 +68,7 @@
     "@types/node": "^24.9.0",
     "@types/sinon": "^17.0.4",
     "@types/vscode": "^1.105.0",
-    "@typescript-eslint/eslint-plugin": "^8.46.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "^3.6.2",
