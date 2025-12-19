@@ -82,6 +82,6 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "azure-devops-node-api": "^15.1.1"
+    "azure-devops-node-api": "^15.1.2"
   }
 }
