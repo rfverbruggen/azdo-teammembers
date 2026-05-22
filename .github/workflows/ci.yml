@@ -20,9 +20,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
       - run: npm install
       - run: xvfb-run -a npm test
         if: runner.os == 'Linux'
@@ -33,14 +33,14 @@ jobs:
     needs: ["test"]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
       - run: npm install
       - run: xvfb-run -a npm test
-      - uses: SonarSource/sonarqube-scan-action@v5.0.0
+      - uses: SonarSource/sonarqube-scan-action@v8.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -51,9 +51,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "lts/*"
       - run: npm install
@@ -71,7 +71,7 @@ jobs:
     steps:
       - name: Dependabot metadata
         id: metadata
-        uses: dependabot/fetch-metadata@v2
+        uses: dependabot/fetch-metadata@v3
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Approve a PR
