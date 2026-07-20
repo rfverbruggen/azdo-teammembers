@@ -79,7 +79,7 @@
     "semantic-release": "^25.0.7",
     "semantic-release-vsce": "^6.1.5",
     "sinon": "^22.0.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "azure-devops-node-api": "^15.1.2"
