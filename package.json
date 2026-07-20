@@ -78,7 +78,7 @@
     "nyc": "^18.0.0",
     "semantic-release": "^25.0.7",
     "semantic-release-vsce": "^6.1.5",
-    "sinon": "^22.0.0",
+    "sinon": "^22.1.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
