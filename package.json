@@ -63,7 +63,7 @@
     "release": "semantic-release"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/changelog": "^7.0.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "^26.1.1",
     "@types/sinon": "^22.0.0",
