@@ -17,11 +17,13 @@ import {
 import AzDOTeamMemberRepository from "./repositories/AzDOTeamMemberRepository";
 import CachedRepository from "./repositories/CachedRepository";
 import Cache from "./cache/Cache";
+import { ITeamMemberFactory } from "./interfaces/ITeamMemberFactory";
 
 let disposables: vscode.Disposable[] = [];
+let teamMemberFactory: ITeamMemberFactory;
 
 export async function activate(context: vscode.ExtensionContext) {
-  const teamMemberFactory = new TeamMemberFactory();
+  teamMemberFactory = new TeamMemberFactory();
   teamMemberFactory.AddTeamMemberRepository(
     new ConfigurationTeamMemberRepository()
   );
@@ -74,9 +76,17 @@ export async function activate(context: vscode.ExtensionContext) {
     new GuidHoverProvider(teamMemberFactory)
   );
 
+  const refreshCacheCommandProvider = vscode.commands.registerCommand(
+    "azdo-teammembers.refreshCache",
+    () => {
+      teamMemberFactory.RefreshCache();
+    }
+  );
+
   context.subscriptions.push(registeredCompletionItemProvider);
   context.subscriptions.push(registeredCodeLensProvider);
   context.subscriptions.push(registeredHoverProvider);
+  context.subscriptions.push(refreshCacheCommandProvider);
 }
 
 export function deactivate() {
