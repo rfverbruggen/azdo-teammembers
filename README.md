@@ -8,7 +8,7 @@
 
 ### Retrieve team members from Azure DevOps
 
-Add you organization URL to the VS Code settings, login using your credentials and the team members will be loaded from Azure DevOps.
+Add your organization URL to the VS Code settings, login using your credentials and the team members will be loaded from Azure DevOps.
 
 ```json
 {
