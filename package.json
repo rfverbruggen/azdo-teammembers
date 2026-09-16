@@ -24,6 +24,12 @@
     "capabilities": {
       "hoverProvider": "true"
     },
+    "commands": [
+      {
+        "command": "azdo-teammembers.refreshCache",
+        "title": "Azure DevOps Team Members: Refresh Cache"
+      }
+    ],
     "configuration": {
       "properties": {
         "azdo-teammembers.teammembers": {
